@@ -1,11 +1,16 @@
 <script>
-	import Console from "$lib/Console.svelte";
+    import { SignIn, SignOut } from "@auth/sveltekit/components"
+    import { page } from "$app/stores"
 </script>
 
-<svelte:head>
-    <title>Generative adventure</title>
-</svelte:head>
-
-<div class="h-screen">
-    <Console />
+<div>
+    {#if $page.data.session}
+        <SignOut>
+            <div slot="submitButton" class="buttonPrimary">Sign out</div>
+        </SignOut>
+    {:else}
+        <SignIn>
+            <div slot="submitButton" class="buttonPrimary">Sign in</div>
+        </SignIn>
+    {/if}
 </div>
