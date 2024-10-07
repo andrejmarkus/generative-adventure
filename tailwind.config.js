@@ -3,8 +3,14 @@ export default {
 	content: ['./src/**/*.{html,js,svelte,ts}'],
 
 	theme: {
-		extend: {}
+		extend: {},
+		fontFamily: {
+			'pixel-operator': ['Pixel Operator', 'sans-serif']
+		}
 	},
 
-	plugins: [require('@tailwindcss/typography')]
+	plugins: [
+		require('@tailwindcss/typography'),
+		require('daisyui')
+	]
 };
