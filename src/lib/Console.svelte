@@ -1,20 +1,17 @@
 <script>
 	import Message from "./Message.svelte";
-    import { messages } from "$lib/stores/messages.js"
 
-    let storedMessages = $messages;
-
-    $: storedMessages.shift();
+    export let messages = [];
     
     // const scrollToBottom = () => {
     //     container.scrollTop = container.scrollHeight;
     // }
 </script>
 
-<form class="font-pixel-operator text-lg size-full flex flex-col items-stretch p-2 font">
+<form method="post" class="font-pixel-operator text-lg size-full flex flex-col items-stretch p-4 font">
     <div class="h-full flex flex-col overflow-y-auto">
-        {#if storedMessages}
-            {#each storedMessages as message, i}
+        {#if messages}
+            {#each messages as message, i}
                 <Message message={message.content} user={i % 2 == 1} />
             {/each}
         {/if}

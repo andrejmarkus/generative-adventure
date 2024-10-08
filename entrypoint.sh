@@ -9,7 +9,7 @@ pid=$!
 sleep 5
 
 echo "🔴 Retrieving"
-ollama pull llama3.2:1b
+ollama pull nemotron-mini 
 echo "🟢 Done!"
 
 # Wait for Ollama process to finish.

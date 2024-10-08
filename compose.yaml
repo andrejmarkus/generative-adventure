@@ -28,7 +28,7 @@ services:
       - 11434:11434
     volumes:
       - ollama-data:/root/.ollama
-      - ./ollama-docker/entrypoint.sh:/entrypoint.sh
+      - ./entrypoint.sh:/entrypoint.sh
     container_name: ollama
     pull_policy: always
     tty: true

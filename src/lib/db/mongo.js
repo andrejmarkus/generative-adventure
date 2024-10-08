@@ -2,6 +2,7 @@ import { MongoClient } from "mongodb";
 
 export const client = new MongoClient(import.meta.env.VITE_MONGO_CONNECTION_STRING);
 export const db = client.db(import.meta.env.VITE_MONGO_DATABASE_NAME);
+export const adventuresCollection = db.collection('adventures');
 
 export async function connect() {
     await client.connect();
