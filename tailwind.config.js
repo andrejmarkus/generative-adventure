@@ -5,7 +5,8 @@ export default {
 	theme: {
 		extend: {},
 		fontFamily: {
-			'pixel-operator': ['Pixel Operator', 'sans-serif']
+			'pixel-operator': ['Pixel Operator', 'sans-serif'],
+			'montserrat': ['Montserrat', 'sans-serif']
 		}
 	},
 

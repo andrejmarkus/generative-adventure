@@ -1,4 +1,4 @@
-import { adventuresCollection } from '../../lib/db/mongo';
+import { adventuresCollection } from '$lib/db/mongo';
 
 export const load = async (event) => {
     const session = await event.locals.auth();

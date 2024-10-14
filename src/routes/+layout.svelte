@@ -3,5 +3,7 @@
 	import Navigation from '$lib/Navigation.svelte';
 </script>
 
-<Navigation />
-<slot></slot>
+<div class="min-h-screen">
+	<Navigation />
+	<slot></slot>
+</div>

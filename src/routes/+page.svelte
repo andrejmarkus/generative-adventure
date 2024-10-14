@@ -7,14 +7,18 @@
     <title>Generative Adventure</title>
 </svelte:head>
 
-<div class="hero min-h-screen">
-    <div class="hero-content text-center">
-        <div>
-            {#if !$page.data.session}
-                <p class="text-3xl font-bold">Welcome to Genertive Adventure</p>
-                <p class="text-xl mt-2">To enjoy your first adventure, please sign in.</p>
-                <button class="btn btn-primary mt-5" on:click={() => signIn()}>Sign in</button>
-            {/if}
-        </div>
+<div class="flex h-[91vh] mx-auto justify-around items-center">
+    <div>
+        {#if !$page.data.session}
+            <p class="font-pixel-operator text-6xl font-bold whitespace-pre-line">
+                Welcome to
+                <span class="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">Generative Adventure</span>!
+            </p>
+            <p class="text-xl mt-4">To enjoy your first adventure, please sign in.</p>
+            <button class="btn btn-primary mt-9" on:click={() => signIn()}>Sign in</button>
+        {/if}
+    </div>
+    <div>
+        <p>Hello</p>
     </div>
 </div>
