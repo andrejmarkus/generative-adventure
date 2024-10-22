@@ -21,9 +21,9 @@
 </script>
 
 {#if show}
-    <div class="bg-base-200 w-full flex justify-between items-center px-4 py-2">
+    <div class="bg-base-200 w-full flex flex-col gap-5 p-5 rounded-lg">
         <div>
-            <p class="text-xl">{name}</p>
+            <p class="text-2xl font-pixel-operator">{name}</p>
             <p>You play as {characterName}</p>
         </div>
         <div>

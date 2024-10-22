@@ -28,6 +28,7 @@
 		"svelte": "^4.2.19",
 		"sveltekit-superforms": "^2.19.1",
 		"tailwindcss": "^3.4.13",
+		"tailwindcss-animated": "^1.1.2",
 		"vite": "^5.4.8",
 		"vite-plugin-node-polyfills": "^0.22.0",
 		"zod": "^3.23.8"
@@ -38,6 +39,7 @@
 		"@auth/sveltekit": "^1.6.0",
 		"@sveltejs/adapter-node": "^5.2.5",
 		"mongodb": "^6.9.0",
-		"ollama": "^0.5.9"
+		"ollama": "^0.5.9",
+		"sse.js": "^2.5.0"
 	}
 }

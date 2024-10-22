@@ -22,7 +22,7 @@
             </div>
         {:else}
             <ul class="menu menu-horizontal">
-                <li><button class="btn btn-ghost" on:click={() => signIn()}>Sign in</button></li>
+                <li><button class="btn btn-primary" on:click={() => signIn()}>Sign in</button></li>
             </ul>
         {/if}
     </div>
