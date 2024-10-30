@@ -1,7 +1,8 @@
 import { MongoClient } from "mongodb";
+import { env } from '$env/dynamic/private'
 
-export const client = new MongoClient(import.meta.env.VITE_MONGO_CONNECTION_STRING);
-export const db = client.db(import.meta.env.VITE_MONGO_DATABASE_NAME);
+export const client = new MongoClient(env.MONGODB_URI);
+export const db = client.db(env.MONGODB_NAME);
 export const adventuresCollection = db.collection('adventures');
 
 export async function connect() {

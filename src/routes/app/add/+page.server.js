@@ -1,5 +1,5 @@
 import { redirect } from '@sveltejs/kit';
-import { adventuresCollection } from '../../../lib/db/mongo';
+import { adventuresCollection } from '$lib/db/mongo';
 import { error } from '@sveltejs/kit';
 
 export const actions = {

@@ -5,9 +5,9 @@ export const POST = async ({ request }) => {
     const messages = data.messages;
 
     const response = await ollama.chat({
-        model: 'nemotron-mini',
+        model: 'llama3.2:latest',
         messages: messages,
-        stream: true           
+        stream: true
     });
 
     const stream = new ReadableStream({

@@ -27,8 +27,20 @@
             <p>You play as {characterName}</p>
         </div>
         <div>
-            <button on:click={deleteAdventure} class="btn btn-error">Delete</button>
+            <button onclick="confirm_modal.showModal()" class="btn btn-error">Delete</button>
             <a href="/app/{adventureId}" class="btn btn-primary">Select</a>
         </div>
     </div>
 {/if}
+<dialog id="confirm_modal" class="modal modal-bottom sm:modal-middle">
+    <div class="modal-box">
+        <h3>Delete adventure</h3>
+        <p>Are you sure you want to delete this adventure?</p>
+        <div class="modal-action">
+            <form method="dialog">
+                <button on:click={deleteAdventure} class="btn btn-error">Yes</button>
+                <button class="btn">No</button>
+            </form>
+        </div>
+    </div>
+</dialog>

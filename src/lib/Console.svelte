@@ -1,6 +1,7 @@
 <script>
 	import Message from "./Message.svelte";
     import { page } from '$app/stores';
+	import { onMount } from "svelte";
 
     export let messages = [];
 
@@ -9,11 +10,37 @@
     let result = '';
     let scrollToDiv;
 
+    onMount(async () => {
+        if (messages.length == 1) {
+            loading = true;
+            const response = await fetch(`/api/app/${$page.params.slug}/init`, {
+                method: 'POST'
+            });
+            
+            const reader = response.body.pipeThrough(new TextDecoderStream()).getReader();
+            while (true) {
+                const { value, done } = await reader.read();
+                if (done) {
+                    loading = false;
+                    break;
+                }
+                result += value;
+            }
+            messages = [...messages, {
+                role: "assistant",
+                content: result
+            }];
+            result = "";
+
+            await updateDatabase();
+        }
+    });
+
     const handleSubmit = async () => {
         loading = true;
         messages = [...messages, { role: 'user', content: prompt }];
 
-        const response = await fetch('/api/chat', {
+        const response = await fetch('/api/app/chat', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -30,7 +57,7 @@
                 loading = false; 
                 break;
             }
-            result += value
+            result += value;
             scrollToBottom();
         }
         messages = [...messages, {
@@ -44,7 +71,7 @@
     }
 
     const updateDatabase = async () => {
-        await fetch(`/api/chat/${$page.params.slug}`, {
+        await fetch(`/api/app/${$page.params.slug}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

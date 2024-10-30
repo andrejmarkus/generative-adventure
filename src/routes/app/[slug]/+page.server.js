@@ -1,4 +1,3 @@
-import { ollama } from '$lib';
 import { adventuresCollection } from '$lib/db/mongo';
 import { ObjectId } from 'mongodb';
 
@@ -41,15 +40,10 @@ export async function load({ params }) {
             "
             `
         };
-
-        const response = await ollama.chat({
-            model: 'nemotron-mini',
-            messages: [ message ]
-        });
-
+    
         await adventuresCollection.updateOne(filter, {
             $set: {
-                messages: [message, response.message]
+                messages: [ message ]
             }
         });
         adventure = await adventuresCollection.findOne(filter);
