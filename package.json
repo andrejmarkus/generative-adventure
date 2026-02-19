@@ -11,6 +11,7 @@
 	},
 	"devDependencies": {
 		"@sveltejs/adapter-auto": "^3.2.5",
+		"@sveltejs/adapter-node": "^5.2.5",
 		"@sveltejs/kit": "^2.6.3",
 		"@sveltejs/vite-plugin-svelte": "^3.1.2",
 		"@tailwindcss/typography": "^0.5.15",
@@ -37,9 +38,8 @@
 	"dependencies": {
 		"@auth/mongodb-adapter": "^3.6.0",
 		"@auth/sveltekit": "^1.6.0",
-		"@sveltejs/adapter-node": "^5.2.5",
 		"mongodb": "^6.9.0",
-		"ollama": "^0.5.9",
+		"openai": "^6.22.0",
 		"sse.js": "^2.5.0"
 	}
 }

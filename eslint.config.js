@@ -18,6 +18,6 @@ export default [
 		}
 	},
 	{
-		ignores: ['build/', '.svelte-kit/', 'dist/', 'ollama/']
+		ignores: ['build/', '.svelte-kit/', 'dist/', 'ai/']
 	}
 ];

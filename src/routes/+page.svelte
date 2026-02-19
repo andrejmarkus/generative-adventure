@@ -6,28 +6,28 @@
     <title>Generative Adventure</title>
 </svelte:head>
 
-<div class="h-[92vh] w-full relative flex flex-col justify-between">
-    <div class="absolute -z-10 bottom-0 left-0 right-0 top-0 bg-[radial-gradient(circle_500px_at_50%_200px,#3e3e3e,transparent)]"></div>
-    <div class="flex h-full items-center justify-center text-center flex-col">
-        <div>
-            <p class="font-pixel-operator text-8xl font-bold whitespace-pre-line">
-                Welcome to
-                <span class="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">Generative Adventure</span>!
-            </p>
-            <p class="text-2xl mt-4">Experience your unique adventures as you want, wherever you want.</p>
-        </div>
-        <div class="relative group mt-9">
-            <div
-                class="absolute -inset-1 bg-gradient-to-r from-primary to-secondary rounded-lg blur opacity-75 group-hover:opacity-100 group-hover:blur-lg">
+<div class="retro-screen relative flex h-[92vh] w-full flex-col items-center justify-center text-center">
+    <div class="scanline pointer-events-none"></div>
+    <div class="relative z-10 flex flex-col items-center">
+        <p class="font-pixel-operator text-7xl font-bold tracking-tighter text-[#3f3] [text-shadow:0_0_20px_rgba(51,255,51,0.8)]">
+            GENERATIVE ADVENTURE
+        </p>
+        <p class="mt-6 text-2xl text-[#3f3]/70">SYSTEM_REBOOT: SUCCESSFUL... READY FOR COMMANDS.</p>
+        
+        <div class="mt-12 flex flex-col items-center gap-6">
+            <div class="ring-1 ring-[#3f3]/50 bg-[#0a1208]/80 p-6 shadow-[0_0_30px_rgba(51,255,51,0.2)]">
+                <p class="text-xl text-[#3f3] mb-4">INITIALIZING CONNECTION TO NARRATOR_ENGINE...</p>
+                <button 
+                    class="px-8 py-3 border border-[#3f3] text-[#3f3] hover:bg-[#3f3] hover:text-[#050a04] transition-all font-bold tracking-widest text-xl shadow-[0_0_15px_rgba(51,255,51,0.4)]"
+                    on:click={() => signIn()}
+                >
+                    [ EXECUTE_LOGIN ]
+                </button>
             </div>
-            <div class="bg-base-content rounded-xl flex justify-between items-center p-4 drop-shadow-lg w-fit gap-8">
-                <span class="flex items-center gap-3">
-                    <span class="text-4xl">✨</span>
-                    <span class="text-primary-content text-lg">Tell me, where should your adventure take place?</span>
-                </span>
-                <button class="btn btn-primary drop-shadow-md" on:click={() => signIn()}>Sign in</button>
-            </div>
+            <p class="text-[#3f3]/40 animate-pulse text-sm">AWAITING AUTHORIZATION...</p>
         </div>
+    </div>
+</div>
     </div>
     <footer class="footer footer-center text-base-content p-4">
         <aside>

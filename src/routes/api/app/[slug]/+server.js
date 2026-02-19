@@ -8,9 +8,14 @@ export const POST = async ({ request, params }) => {
     const data = await request.json();
     const messages = data.messages;
 
+    const existing = await adventuresCollection.findOne(filter);
+    // Protect the system prompt and initial intro from being changed by the client.
+    const protectedMessages = existing.messages.slice(0, 2);
+    const updatedMessages = [...protectedMessages, ...messages.slice(2)];
+
     await adventuresCollection.updateOne(filter, {
         $set: {
-            messages: messages
+            messages: updatedMessages
         }
     });
 
