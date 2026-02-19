@@ -33,7 +33,7 @@
 		if (messages.length == 2) {
 			loading = true;
 			isThinking = true;
-			const response = await fetch(`/api/app/${$page.params.slug}/init`, {
+			const response = await fetch(`/api/adventure/${$page.params.slug}/init`, {
 				method: 'POST'
 			});
 
@@ -71,7 +71,7 @@
 		messages = [...messages, { role: 'user', content: prompt }];
 		prompt = '';
 
-		const response = await fetch(`/api/app/${$page.params.slug}/chat`, {
+		const response = await fetch(`/api/adventure/${$page.params.slug}/chat`, {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json'
@@ -105,7 +105,7 @@
 	};
 
 	const updateDatabase = async () => {
-		await fetch(`/api/app/${$page.params.slug}`, {
+		await fetch(`/api/adventure/${$page.params.slug}`, {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json'

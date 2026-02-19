@@ -1,4 +1,4 @@
-import { connect } from "$lib/db/mongo";
+import { connect } from "$lib/server/db";
 export { handle } from "./auth";
 
 connect();

@@ -1,10 +1,16 @@
-import { adventuresCollection } from '$lib/db/mongo.js';
-import { ObjectId } from 'mongodb';
+import { deleteAdventure } from '$lib/server/services/adventureService';
+import { json, error } from '@sveltejs/kit';
 
-export const POST = async({ request }) => {
+export const POST = async ({ request, locals }) => {
+    const session = await locals.auth();
+    if (!session?.user) throw error(401, "Unauthorized");
+
     const { adventureId } = await request.json();
+    const success = await deleteAdventure(adventureId, session.user.email);
 
-    const result = await adventuresCollection.deleteOne({ _id: new ObjectId(adventureId) });
+    if (!success) {
+        throw error(400, "Failed to delete timeline");
+    }
 
-    return new Response("302");
+    return json({ success: true });
 }

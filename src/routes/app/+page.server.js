@@ -1,13 +1,9 @@
-import { adventuresCollection } from '$lib/db/mongo';
+import { getAdventuresForUser } from '$lib/server/services/adventureService';
 
-export const load = async (event) => {
-    const session = await event.locals.auth();
-    const result = await adventuresCollection.find({ userEmail: session.user.email }).toArray();
-    
-    const adventures = result.map(adventure => ({
-        ...adventure,
-        _id: adventure._id.toString()
-    }));
+export const load = async ({ locals }) => {
+    const session = await locals.auth();
+    if (!session?.user) return { adventures: [] };
 
-    return { adventures }
-}
+    const adventures = await getAdventuresForUser(session.user.email);
+    return { adventures };
+};
