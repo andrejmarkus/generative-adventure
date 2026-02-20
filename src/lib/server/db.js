@@ -6,8 +6,8 @@ import { env } from '$env/dynamic/private'
 const uri = env.MONGODB_URI || "mongodb://localhost:27017/placeholder";
 export const client = new MongoClient(uri);
 
-// Use a placeholder if MONGODB_NAME is not available
-const dbName = env.MONGODB_NAME || "gen_adventure_db";
+// Use MONGODB_NAME if provided, or let it be determined by the URI/default
+const dbName = env.MONGODB_NAME || undefined;
 export const db = client.db(dbName);
 export const adventuresCollection = db.collection('adventures');
 

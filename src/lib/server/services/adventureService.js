@@ -1,8 +1,15 @@
 import { ObjectId } from 'mongodb';
 import { adventuresCollection } from '$lib/server/db';
 
-export async function getAdventuresForUser(userEmail) {
-    const result = await adventuresCollection.find({ userEmail }).toArray();
+export async function getAdventuresForUser(userId, userEmail) {
+    const query = { $or: [] };
+    if (userId) query.$or.push({ userId });
+    if (userEmail) query.$or.push({ userEmail });
+    
+    // If neither is provided, return empty
+    if (query.$or.length === 0) return [];
+
+    const result = await adventuresCollection.find(query).toArray();
     return result.map(adventure => ({
         ...adventure,
         _id: adventure._id.toString()
@@ -17,7 +24,7 @@ export async function getAdventureById(id) {
     return adventure;
 }
 
-export async function createAdventure(userEmail, { name, characterName, setting }) {
+export async function createAdventure(userId, userEmail, { name, characterName, setting }) {
     const defaultMessages = [
         {
             role: 'system',
@@ -56,6 +63,7 @@ export async function createAdventure(userEmail, { name, characterName, setting 
     ];
 
     const result = await adventuresCollection.insertOne({
+        userId,
         userEmail,
         name,
         characterName,
@@ -67,8 +75,16 @@ export async function createAdventure(userEmail, { name, characterName, setting 
     return result.acknowledged ? result.insertedId.toString() : null;
 }
 
-export async function updateAdventureMessages(id, messages) {
-    const filter = { _id: new ObjectId(id) };
+export async function updateAdventureMessages(id, userId, userEmail, messages) {
+    const filter = { 
+        _id: new ObjectId(id),
+        $or: []
+    };
+    if (userId) filter.$or.push({ userId });
+    if (userEmail) filter.$or.push({ userEmail });
+
+    if (filter.$or.length === 0) return false;
+
     const adventure = await adventuresCollection.findOne(filter);
     if (!adventure) return false;
 
@@ -83,8 +99,17 @@ export async function updateAdventureMessages(id, messages) {
     return result.acknowledged;
 }
 
-export async function deleteAdventure(id, userEmail) {
-    const filter = { _id: new ObjectId(id), userEmail };
+export async function deleteAdventure(id, userId, userEmail) {
+    const filter = { 
+        _id: new ObjectId(id),
+        $or: []
+    };
+    if (userId) filter.$or.push({ userId });
+    if (userEmail) filter.$or.push({ userEmail });
+
+    // If neither is provided, then it's effectively protected from deletion
+    if (filter.$or.length === 0) return false;
+
     const result = await adventuresCollection.deleteOne(filter);
     return result.acknowledged && result.deletedCount > 0;
 }

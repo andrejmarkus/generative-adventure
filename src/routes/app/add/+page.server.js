@@ -22,7 +22,11 @@ export const actions = {
             });
         }
 
-        const adventureId = await createAdventure(session.user.email, result.data);
+        const adventureId = await createAdventure(
+            session.user.id,
+            session.user.email,
+            result.data
+        );
 
         if (!adventureId) {
             return fail(500, { message: "Database Error: Timeline initialization failed" });

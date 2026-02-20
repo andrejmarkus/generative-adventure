@@ -7,33 +7,37 @@
 
 <div
 	in:fade={{ duration: 400 }}
-	class="mb-6 flex flex-col {user ? 'items-end' : 'items-start'} w-full"
+	class="mb-10 flex flex-col {user ? 'items-end' : 'items-start'} group w-full"
 >
 	<div
-		class="max-w-[90%] {user
-			? 'border-l-4 border-[#0ff]/60 bg-[#001a1a]/40 p-4 text-[#0ff] [text-shadow:0_0_8px_rgba(0,255,255,0.4)]'
-			: 'border-l-4 border-[#3f3]/60 bg-[#051105]/40 p-4 text-[#3f3] [text-shadow:0_0_8px_rgba(51,255,51,0.4)]'}"
+		class="retro-container max-w-[85%] {user
+			? 'border-white/60 bg-[#111] shadow-[4px_4px_0_0_rgba(255,255,255,0.05)]'
+			: 'border-white/20 bg-black'}"
 	>
 		<div
-			class="font-mono mb-2 flex items-center gap-2 text-[10px] uppercase tracking-[0.3em] opacity-40"
+			class="font-press-start mb-4 flex items-center gap-3 text-[8px] uppercase tracking-[0.2em] {user
+				? 'text-[#f8d81c]'
+				: 'text-white'}"
 		>
+			<span class="h-1.5 w-1.5 animate-pulse bg-current"></span>
 			{#if user}
-				<span class="h-1 w-8 bg-[#0ff]/40"></span>
-				<span>PLAYER_INPUT</span>
+				<span>INPUT</span>
 			{:else}
-				<span class="h-1 w-8 bg-[#3f3]/40"></span>
-				<span>NARRATOR_FEED</span>
+				<span>CHRONICLE</span>
 			{/if}
 		</div>
 		<p
-			class="whitespace-pre-wrap text-wrap font-pixel-operator text-xl leading-relaxed tracking-wide"
+			class="whitespace-pre-wrap text-wrap font-pixel-operator text-2xl leading-relaxed tracking-wide {user
+				? 'text-[#f8d81c]/90'
+				: 'text-white/90'}"
 		>
 			{#if !user && !message}
-				<span class="animate-pulse italic opacity-70">AWAITING_DATA_STREAM...</span>
+				<span class="animate-pulse opacity-40">...</span>
+			{:else}
+				{message}
 			{/if}
-			{message}
 			{#if isLoading && message}
-				<span class="mb-[-2px] ml-1 inline-block h-[1.1em] w-2.5 animate-pulse bg-current"></span>
+				<span class="ml-2 inline-block h-4 w-4 animate-pulse bg-current opacity-80"></span>
 			{/if}
 		</p>
 	</div>

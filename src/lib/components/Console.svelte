@@ -127,40 +127,42 @@
 	};
 </script>
 
-<div
-	class="retro-screen relative flex size-full flex-col items-stretch p-6 font-pixel-operator text-xl"
->
-	<div class="scanline pointer-events-none"></div>
+<div class="relative flex h-full flex-col items-stretch p-8 font-pixel-operator">
 	<div
 		bind:this={container}
 		on:scroll={handleScroll}
-		class="relative z-0 flex h-full flex-col overflow-y-auto px-4"
+		class="custom-scrollbar relative z-0 flex h-full flex-col overflow-y-auto px-4"
 	>
 		{#if messages}
-			{#each messages.slice(2) as message, i}
-				<Message message={message.content} user={i % 2 == 1} />
-			{/each}
+			<div class="flex flex-col gap-2 pt-8">
+				{#each messages.slice(2) as message, i}
+					<Message message={message.content} user={i % 2 == 1} />
+				{/each}
+			</div>
 		{/if}
 		{#if loading}
 			<Message message={result} user={false} isLoading={true} />
 		{/if}
 	</div>
-	<form class="relative z-20 pt-4" method="post" on:submit|preventDefault={handleSubmit}>
-		<div class="flex items-center gap-4 bg-black/40 p-2 ring-1 ring-[#3f3]/30">
-			<span class="animate-pulse text-[#3f3] shadow-lg">&gt;</span>
-			<input
-				bind:value={prompt}
-				disabled={loading}
-				name="prompt"
-				placeholder={isThinking
-					? 'ANALYZING...'
-					: loading
-						? 'TRANSMITTING...'
-						: 'WAITING FOR COMMAND...'}
-				class="w-full border-none bg-transparent text-[#3f3] outline-none placeholder:text-[#3f3]/30"
-				type="text"
-				autocomplete="off"
-			/>
+	<form class="relative z-20 mt-auto pt-8" method="post" on:submit|preventDefault={handleSubmit}>
+		<div class="group relative">
+			<div
+				class="absolute -inset-0.5 bg-white/20 opacity-0 blur-sm transition-opacity group-focus-within:opacity-100"
+			></div>
+			<div
+				class="relative flex items-center gap-5 border-2 border-white/40 bg-black p-5 shadow-[0_0_20px_rgba(0,0,0,0.5)] transition-all focus-within:border-white"
+			>
+				<span class="font-press-start text-xs font-bold text-[#f8d81c]">CMD_</span>
+				<input
+					bind:value={prompt}
+					disabled={loading}
+					name="prompt"
+					placeholder={isThinking ? 'TRANSMITTING...' : loading ? 'PROCESSING...' : 'ENTER COMMAND'}
+					class="font-press-start w-full bg-transparent text-[10px] tracking-widest text-white outline-none placeholder:text-white/20"
+					type="text"
+					autocomplete="off"
+				/>
+			</div>
 		</div>
 	</form>
 </div>

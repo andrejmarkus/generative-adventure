@@ -8,14 +8,14 @@
 	<title>My Adventures</title>
 </svelte:head>
 
-<div class="retro-screen relative flex min-h-[92vh] w-full flex-col items-center p-6">
-	<div class="scanline pointer-events-none"></div>
-	<div class="relative z-10 w-full max-w-4xl">
-		<h1
-			class="mb-8 font-pixel-operator text-4xl font-bold uppercase tracking-widest text-[#3f3] [text-shadow:0_0_10px_rgba(51,255,51,0.5)]"
-		>
-			ACTIVE_TIMELINES
-		</h1>
+<div class="relative flex min-h-[92vh] w-full flex-col items-center p-12">
+	<div class="relative z-10 w-full max-w-5xl">
+		<div class="mb-12 flex items-center gap-6">
+			<div class="h-10 w-2 bg-[#f8d81c]"></div>
+			<h1 class="font-press-start text-sm uppercase tracking-[0.5em] text-white">
+				SAVED CHRONICLES
+			</h1>
+		</div>
 		<div class="flex flex-col gap-6">
 			{#if data.adventures && data.adventures.length > 0}
 				{#each data.adventures as adventure}
@@ -26,22 +26,20 @@
 					/>
 				{/each}
 			{:else}
-				<div class="bg-[#0a1208]/80 p-12 text-center ring-1 ring-[#3f3]/30">
-					<p class="mb-4 animate-pulse font-pixel-operator text-2xl text-[#3f3]/60">
-						ERROR: NO_ACTIVE_DATA_STREAMS_FOUND
+				<div class="retro-container border-dashed border-white/10 bg-black/40 p-16 text-center">
+					<p class="font-press-start mb-6 text-[10px] uppercase tracking-widest text-white/40">
+						NO TEMPORAL STREAMS DETECTED
 					</p>
-					<p class="font-mono text-xs uppercase tracking-widest text-[#3f3]/40">
-						PLEASE_INITIALIZE_TEMPORAL_ANCHOR
-					</p>
+					<div class="flex flex-col items-center justify-center gap-4">
+						<div class="h-1 w-12 bg-white/20"></div>
+						<p class="font-pixel-operator text-xl text-white/20">CREATE A NEW HISTORY</p>
+					</div>
 				</div>
 			{/if}
 
-			<div class="mt-8">
-				<a
-					href="/app/add"
-					class="inline-block border border-[#3f3] px-10 py-4 font-pixel-operator text-2xl font-bold uppercase tracking-widest text-[#3f3] shadow-[0_0_20px_rgba(51,255,51,0.3)] transition-all hover:bg-[#3f3] hover:text-[#050a04]"
-				>
-					[ INIT_NEW_TIMELINE ]
+			<div class="mt-12">
+				<a href="/app/add" class="retro-button is-primary px-12 py-5 font-bold uppercase">
+					NEW QUEST
 				</a>
 			</div>
 		</div>

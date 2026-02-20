@@ -7,33 +7,37 @@
 </svelte:head>
 
 <div
-	class="retro-screen relative flex h-[92vh] w-full flex-col items-center justify-center text-center"
+	class="relative flex h-[92vh] w-full flex-col items-center justify-center overflow-hidden bg-[#040404] p-12 text-center"
 >
-	<div class="scanline pointer-events-none"></div>
 	<div class="relative z-10 flex flex-col items-center">
-		<p
-			class="font-pixel-operator text-7xl font-bold tracking-tighter text-[#3f3] [text-shadow:0_0_20px_rgba(51,255,51,0.8)]"
-		>
-			GENERATIVE ADVENTURE
+		<div class="mb-6 opacity-40">
+			<span class="font-press-start text-[10px] tracking-[1em] text-white">EST. 2026</span>
+		</div>
+		<h1 class="font-press-start text-4xl font-bold leading-tight tracking-[0.2em] text-white">
+			GENERATIVE<br /><span class="text-[#f8d81c]">ADVENTURE</span>
+		</h1>
+		<div class="mt-12 h-1 w-24 bg-white/20"></div>
+		<p class="mt-12 max-w-xl font-pixel-operator text-2xl tracking-widest text-white/50">
+			A WORLD BUILT FROM STRINGS AND DATA.<br />
+			YOUR CHOICES DEFINE THE NARRATIVE.
 		</p>
-		<p class="mt-6 text-2xl text-[#3f3]/70">SYSTEM_REBOOT: SUCCESSFUL... READY FOR COMMANDS.</p>
 
-		<div class="mt-12 flex flex-col items-center gap-6">
-			<div class="bg-[#0a1208]/80 p-6 shadow-[0_0_30px_rgba(51,255,51,0.2)] ring-1 ring-[#3f3]/50">
-				<p class="mb-4 text-xl text-[#3f3]">INITIALIZING CONNECTION TO NARRATOR_ENGINE...</p>
+		<div class="mt-20 flex flex-col items-center gap-10">
+			<div class="p-1">
 				<button
-					class="border border-[#3f3] px-8 py-3 text-xl font-bold tracking-widest text-[#3f3] shadow-[0_0_15px_rgba(51,255,51,0.4)] transition-all hover:bg-[#3f3] hover:text-[#050a04]"
+					class="retro-button is-primary font-press-start bg-black px-16 py-6 text-xs font-bold tracking-[0.5em] transition-all hover:scale-105 active:scale-95"
 					on:click={() => signIn()}
 				>
-					[ EXECUTE_LOGIN ]
+					PRESS START
 				</button>
 			</div>
-			<p class="animate-pulse text-sm text-[#3f3]/40">AWAITING AUTHORIZATION...</p>
+			<div class="flex items-center gap-4 opacity-20">
+				<div class="h-1 w-8 bg-white"></div>
+				<p class="font-press-start text-[8px] uppercase tracking-widest text-white">
+					AWAITING CONNECTION
+				</p>
+				<div class="h-1 w-8 bg-white"></div>
+			</div>
 		</div>
 	</div>
-	<footer class="footer footer-center p-4 text-base-content">
-		<aside>
-			<p>Let <b>AI</b> help with realizing you adventure, that you are dreaming of.</p>
-		</aside>
-	</footer>
 </div>

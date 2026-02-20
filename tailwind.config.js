@@ -6,6 +6,7 @@ export default {
 		extend: {},
 		fontFamily: {
 			'pixel-operator': ['Pixel Operator', 'sans-serif'],
+			'press-start': ['"Press Start 2P"', 'cursive'],
 			'montserrat': ['Montserrat', 'sans-serif']
 		}
 	},
