@@ -14,8 +14,9 @@ Generative Adventure is a modern, AI-powered storytelling platform that brings y
 ## ✨ Features
 
 - **🤖 AI Storytelling**: Dynamic and immersive adventures powered by **OpenRouter** (Llama 3.1 8B Free).
+- **⚔️ Advanced Combat System**: A structured D20-based fight system with dynamic outcomes, vivid descriptions, and visceral feedback (screen shake).
 - **🔐 Secure Authentication**: Integrated with **Auth.js** and **Google OAuth** for a seamless sign-in experience.
-- **💾 Persistent Progress**: Your adventures and choices are saved securely in **MongoDB**.
+- **💾 Persistent Progress**: Your adventures, choices, and character stats are saved securely in **MongoDB**.
 - **🎨 Retro Aesthetics**: A sleek, responsive user interface with a retro feel, built with **SvelteKit**, **Tailwind CSS**, **DaisyUI**, and a custom **Pixel Operator** font.
 - **🌊 Streaming Responses**: Real-time AI chat responses for a fluid storytelling experience.
 
@@ -53,62 +54,30 @@ _(Add your screenshots here to make it even more eye-catching!)_
 
 ### Environment Variables
 
-Create a `.env` file in the root directory and add the following:
+Copy the example environment file and fill in your details:
 
-```env
-# Auth.js
-AUTH_SECRET="your-auth-secret" # Generate one: openssl rand -base64 32
-AUTH_TRUST_HOST=true           # Required for Railway/non-Vercel deployments
-GOOGLE_CLIENT_ID="your-google-client-id"
-GOOGLE_CLIENT_SECRET="your-google-client-secret"
-
-# MongoDB
-MONGODB_URI="mongodb://localhost:27017"
-MONGODB_NAME="generative-adventure"
-
-# OpenRouter
-OPENROUTER_API_KEY="your-openrouter-key"
-
-# App
-PUBLIC_BASE_URL="http://localhost:5173"
+```bash
+cp .env.example .env
 ```
 
-### Installation
+The following variables are required:
 
-1.  **Clone the repository**:
-
-    ```bash
-    git clone https://github.com/your-username/generative-adventure.git
-    cd generative-adventure
-    ```
-
-2.  **Install dependencies**:
-
-    ```bash
-    pnpm install
-    ```
-
-3.  **Start the development server**:
-
-    ```bash
-    pnpm dev
-    ```
+- `AUTH_SECRET`: Secret for session encryption.
+- `GOOGLE_CLIENT_ID` / `GOOGLE_CLIENT_SECRET`: OAuth credentials from Google Cloud Console.
+- `MONGODB_URI`: Connection string for your MongoDB database.
+- `OPENROUTER_API_KEY`: API key for model inference.
 
 ---
 
 ## 🐳 Docker Deployment
 
-To run the entire stack (App + MongoDB) using Docker:
+You can run the entire stack (App + MongoDB) using Docker:
 
-1.  **Build and run**:
+```bash
+docker-compose up -d
+```
 
-    ```bash
-    docker compose up --build -d
-    ```
-
-2.  Access the application at `http://localhost:3000`.
-
-_Note: If the AI Engine is running outside the Docker network, ensure its API is reachable (e.g., set `AI_HOST` properly in the app container)._
+The app will be available at `http://localhost:3000`.
 
 ---
 

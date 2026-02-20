@@ -39,6 +39,12 @@
 		'Crafting your legend...'
 	];
 	let showHelp = false;
+	let shaking = false;
+
+	const triggerShake = (intensity = 'medium') => {
+		shaking = true;
+		setTimeout(() => (shaking = false), 500);
+	};
 
 	$: if (stats) {
 		// Detect stat changes and show toasts
@@ -62,6 +68,7 @@
 
 			if (prevStats.health !== undefined && prevStats.health !== stats.health) {
 				const diff = stats.health - prevStats.health;
+				if (diff < 0) triggerShake();
 				changes.push({
 					type: 'health',
 					message: `Health ${diff > 0 ? '+' : ''}${diff}`,
@@ -411,7 +418,9 @@
 			rest: 'I want to rest and recover my health',
 			inventory: 'Show me my current inventory and equipment',
 			look: 'I look around and examine my surroundings',
-			status: 'Tell me about my current status and condition'
+			status: 'Tell me about my current status and condition',
+			attack: 'I strike at the nearest enemy with my weapon!',
+			defend: 'I brace myself and take a defensive position.'
 		};
 		prompt = actions[action] || '';
 		handleSubmit();
@@ -445,7 +454,9 @@
 </script>
 
 <div
-	class="relative flex h-full flex-col items-stretch gap-2 p-2 font-pixel-operator sm:gap-4 sm:p-4 lg:p-8"
+	class="relative flex h-full flex-col items-stretch gap-2 p-2 font-pixel-operator sm:gap-4 sm:p-4 lg:p-8 {shaking
+		? 'shake'
+		: ''}"
 >
 	<!-- Top Adaptive HUD -->
 	<StatusBar {stats} bind:isExpanded onHelpClick={() => (showHelp = !showHelp)} />
@@ -718,5 +729,30 @@
 	}
 	.animate-slide-in-right {
 		animation: slide-in-right 0.5s ease-out;
+	}
+
+	.shake {
+		animation: shake 0.5s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+		transform: translate3d(0, 0, 0);
+	}
+
+	@keyframes shake {
+		10%,
+		90% {
+			transform: translate3d(-1px, 0, 0);
+		}
+		20%,
+		80% {
+			transform: translate3d(2px, 0, 0);
+		}
+		30%,
+		50%,
+		70% {
+			transform: translate3d(-4px, 0, 0);
+		}
+		40%,
+		60% {
+			transform: translate3d(4px, 0, 0);
+		}
 	}
 </style>

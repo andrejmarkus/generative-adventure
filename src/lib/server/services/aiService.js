@@ -108,30 +108,26 @@ export async function summarizeAdventure(messages) {
  * Expects the template: INVENTORY, WEAPONS/ARMOR, STATS
  */
 export function extractStats(text) {
-	const stats = {
-		inventory: [],
-		weapons: [],
-		health: 100,
-		hunger: 100,
-		money: 0
-	};
+	const stats = {};
 
 	try {
 		// Simple regex-based extraction
 		const inventoryMatch = text.match(/INVENTORY:\s*([\s\S]*?)\s*(?:WEAPONS\/ARMOR:|$)/i);
 		if (inventoryMatch) {
-			stats.inventory = inventoryMatch[1]
+			const items = inventoryMatch[1]
 				.trim()
 				.split('\n')
 				.filter((i) => i.trim() && i.trim() !== '[ items ]');
+			if (items.length > 0) stats.inventory = items;
 		}
 
 		const weaponsMatch = text.match(/WEAPONS\/ARMOR:\s*([\s\S]*?)\s*(?:STATS:|$)/i);
 		if (weaponsMatch) {
-			stats.weapons = weaponsMatch[1]
+			const weapons = weaponsMatch[1]
 				.trim()
 				.split('\n')
 				.filter((i) => i.trim() && !i.includes('[ weapon'));
+			if (weapons.length > 0) stats.weapons = weapons;
 		}
 
 		const healthMatch = text.match(/Health:\s*(\d+)/i);

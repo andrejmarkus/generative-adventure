@@ -42,6 +42,24 @@
 		</button>
 		<button
 			type="button"
+			on:click={() => onQuickAction('attack')}
+			disabled={loading}
+			class="rounded border border-red-900/40 bg-red-950/20 px-2 py-1 font-press-start text-[6px] text-red-400/80 transition-colors hover:bg-red-900/30 hover:text-red-300 disabled:opacity-50 sm:text-[8px]"
+			title="Attack the nearest enemy"
+		>
+			ATTACK
+		</button>
+		<button
+			type="button"
+			on:click={() => onQuickAction('defend')}
+			disabled={loading}
+			class="rounded border border-blue-900/40 bg-blue-950/20 px-2 py-1 font-press-start text-[6px] text-blue-400/80 transition-colors hover:bg-blue-900/30 hover:text-blue-300 disabled:opacity-50 sm:text-[8px]"
+			title="Take a defensive stance"
+		>
+			DEFEND
+		</button>
+		<button
+			type="button"
 			on:click={() => onQuickAction('status')}
 			disabled={loading}
 			class="rounded border border-white/20 bg-black/50 px-2 py-1 font-press-start text-[6px] text-white/60 transition-colors hover:bg-white/10 hover:text-white disabled:opacity-50 sm:text-[8px]"

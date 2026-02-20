@@ -47,6 +47,17 @@ export async function createAdventure(
             - In sci-fi: use technology, space travel, alien encounters
             - In historical: use period-appropriate technology and social norms
             Implement interesting and shocking random events to keep me interested in story.
+            
+            COMBAT RULES:
+            - When combat occurs, describe the enemy VIVIDLY.
+            - SECRETLY roll a d20 (1-20) to determine outcomes.
+            - If it's a 1-5: Critical failure/Major damage (lose 20-30 HP).
+            - If it's a 6-10: Failure/Moderate damage (lose 10-20 HP).
+            - If it's a 11-15: Success with cost/Slight damage (lose 5-10 HP).
+            - If it's a 16-20: Major success (no HP loss, clear victory).
+            - Based on the roll, describe the action in VIVID, DYNAMIC detail.
+            - Use the player's WEAPONS/ARMOR when narrating the results.
+            
             The player can die and is not the most powerful, they have same power as all the NPCs in the game.
             Lower the hunger by 5-15 points per major action (travel, combat, exploration). Health decreases only during combat or dangerous situations.
             Players can recover health by resting (specify "rest" or "sleep") and hunger by eating food from inventory.
@@ -124,10 +135,18 @@ export async function updateAdventureMessages(id, userId, userEmail, messages) {
 	}
 
 	// Parse stats from the last message if it's from the assistant
-	let latestStats = adventure.stats || {};
+	let latestStats = adventure.stats || {
+		health: 100,
+		hunger: 100,
+		money: 0,
+		inventory: [],
+		weapons: []
+	};
 	const lastMessage = updatedMessages[updatedMessages.length - 1];
 	if (lastMessage && lastMessage.role === 'assistant') {
-		latestStats = extractStats(lastMessage.content);
+		const parsedStats = extractStats(lastMessage.content);
+		// Merge parsed stats into latestStats to preserve values not mentioned by AI
+		latestStats = { ...latestStats, ...parsedStats };
 	}
 
 	// Story Recap / Infinite Memory logic:
