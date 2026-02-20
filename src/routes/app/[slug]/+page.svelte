@@ -9,5 +9,5 @@
 </svelte:head>
 
 <div class="h-[93vh]">
-	<Console messages={data.messages} />
+	<Console messages={data.messages} stats={data.adventure.stats} />
 </div>

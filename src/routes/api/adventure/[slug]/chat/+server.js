@@ -27,7 +27,7 @@ export const POST = async ({ request, params, locals }) => {
         ...clientMessages.slice(2)
     ];
 
-    const stream = await streamChat(fullMessages);
+    const stream = await streamChat(fullMessages, adventure.recap || "");
 
     return new Response(stream, {
         headers: {

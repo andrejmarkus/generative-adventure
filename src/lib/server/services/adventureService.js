@@ -1,5 +1,8 @@
 import { ObjectId } from 'mongodb';
 import { adventuresCollection } from '$lib/server/db';
+import { extractStats, summarizeAdventure } from './aiService';
+
+const MAX_MESSAGES_DB = 100;
 
 export async function getAdventuresForUser(userId, userEmail) {
     const query = { $or: [] };
@@ -90,10 +93,43 @@ export async function updateAdventureMessages(id, userId, userEmail, messages) {
 
     // Protect the system prompt and initial intro.
     const protectedMessages = adventure.messages.slice(0, 2);
-    const updatedMessages = [...protectedMessages, ...messages.slice(2)];
+    let updatedMessages = [...protectedMessages, ...messages.slice(2)];
+
+    // CAP DATABASE DOCUMENT SIZE:
+    // Only store the most recent messages up to MAX_MESSAGES_DB
+    // to prevent the MongoDB document from growing indefinitely.
+    if (updatedMessages.length > MAX_MESSAGES_DB) {
+        const recentMessages = updatedMessages.slice(-(MAX_MESSAGES_DB - 2));
+        updatedMessages = [...protectedMessages, ...recentMessages];
+    }
+
+    // Parse stats from the last message if it's from the assistant
+    let latestStats = adventure.stats || {};
+    const lastMessage = updatedMessages[updatedMessages.length - 1];
+    if (lastMessage && lastMessage.role === 'assistant') {
+        latestStats = extractStats(lastMessage.content);
+    }
+
+    // Story Recap / Infinite Memory logic:
+    // If the number of messages grows large (e.g., > 40), 
+    // we generate a new recap to maintain context in the sliding window.
+    let recap = adventure.recap || "";
+    if (updatedMessages.length > 40 && updatedMessages.length % 20 === 0) {
+        try {
+            const newRecap = await summarizeAdventure(updatedMessages);
+            if (newRecap) recap = newRecap;
+        } catch (e) {
+            console.error("Failed to generate recap:", e);
+        }
+    }
 
     const result = await adventuresCollection.updateOne(filter, {
-        $set: { messages: updatedMessages, updatedAt: new Date() }
+        $set: { 
+            messages: updatedMessages, 
+            stats: latestStats,
+            recap: recap,
+            updatedAt: new Date() 
+        }
     });
 
     return result.acknowledged;
