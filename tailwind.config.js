@@ -7,13 +7,9 @@ export default {
 		fontFamily: {
 			'pixel-operator': ['Pixel Operator', 'sans-serif'],
 			'press-start': ['"Press Start 2P"', 'cursive'],
-			'montserrat': ['Montserrat', 'sans-serif']
+			montserrat: ['Montserrat', 'sans-serif']
 		}
 	},
 
-	plugins: [
-		require('@tailwindcss/typography'),
-		require('daisyui'),
-		require('tailwindcss-animated')
-	]
+	plugins: [require('@tailwindcss/typography'), require('daisyui'), require('tailwindcss-animated')]
 };

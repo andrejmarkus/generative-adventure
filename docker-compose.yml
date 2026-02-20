@@ -2,7 +2,7 @@ services:
   app:
     build: .
     ports:
-      - "3000:3000"
+      - '3000:3000'
     environment:
       - MONGODB_URI=mongodb://db:27017
       - MONGODB_NAME=generative-adventure
@@ -16,7 +16,7 @@ services:
   db:
     image: mongo:7
     ports:
-      - "27017:27017"
+      - '27017:27017'
     volumes:
       - mongodb_data:/data/db
 

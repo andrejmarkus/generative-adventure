@@ -1,37 +1,52 @@
+// Chat API - Generative Adventure
+import { error } from '@sveltejs/kit';
 import { getAdventureById } from '$lib/server/services/adventureService';
 import { streamChat } from '$lib/server/services/aiService';
-import { error } from '@sveltejs/kit';
 
+/** @type {import('./$types').RequestHandler} */
 export const POST = async ({ request, params, locals }) => {
-    const session = await locals.auth();
-    if (!session?.user) throw error(401, "Unauthorized");
+	try {
+		const session = await locals.auth();
+		if (!session?.user) throw error(401, 'Unauthorized');
 
-    const adventure = await getAdventureById(params.slug);
-    if (!adventure) throw error(404, "Timeline not found");
+		// Validate Hex ID
+		if (!params.slug || !/^[0-9a-fA-F]{24}$/.test(params.slug)) {
+			throw error(400, 'Invalid Adventure ID format');
+		}
 
-    // Check ownership
-    const isOwner = (adventure.userId && adventure.userId === session.user.id) || 
-                    (adventure.userEmail && adventure.userEmail === session.user.email);
-    
-    if (!isOwner) throw error(403, "Forbidden: You don't own this timeline");
+		const adventure = await getAdventureById(params.slug);
+		if (!adventure) throw error(404, 'Timeline not found');
 
-    const data = await request.json();
-    const clientMessages = data.messages || [];
+		const isOwner =
+			(adventure.userId && adventure.userId === session.user.id) ||
+			(adventure.userEmail && adventure.userEmail === session.user.email);
 
-    const systemPrompt = adventure.messages[0];
-    const userIntro = adventure.messages[1];
-    
-    const fullMessages = [
-        systemPrompt,
-        userIntro,
-        ...clientMessages.slice(2)
-    ];
+		if (!isOwner) throw error(403, "Forbidden");
 
-    const stream = await streamChat(fullMessages, adventure.recap || "");
+		const currentStats = adventure.stats || {};
+		if (currentStats.health <= 0 || currentStats.hunger <= 0) {
+			throw error(400, 'Game Over');
+		}
 
-    return new Response(stream, {
-        headers: {
-            'Content-Type': 'text/event-stream'
-        }
-    });
-}
+		const data = await request.json();
+		const clientMessages = data.messages || [];
+
+		const systemPrompt = adventure.messages[0];
+		const userIntro = adventure.messages[1];
+
+		const fullMessages = [systemPrompt, userIntro, ...clientMessages.slice(2)];
+
+		const stream = await streamChat(fullMessages, adventure.recap || '');
+
+		return new Response(stream, {
+			headers: {
+				'Content-Type': 'text/event-stream'
+			}
+		});
+	} catch (err) {
+		console.error('Chat API error:', err);
+		// If it's already a SvelteKit error, rethrow it
+		if (err.status && err.body) throw err;
+		throw error(500, err.message || 'Failed to process command');
+	}
+};

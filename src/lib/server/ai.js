@@ -4,12 +4,10 @@ import { env } from '$env/dynamic/private';
 
 // OpenRouter configuration
 export const ai = new OpenAI({
-    apiKey: env.OPENROUTER_API_KEY || "dummy-key",
-    baseURL: "https://openrouter.ai/api/v1",
-    defaultHeaders: {
-        "HTTP-Referer": "http://localhost:5173", // Optional, for OpenRouter rankings
-        "X-Title": "Generative Adventure", // Optional
-    }
+	apiKey: env.OPENROUTER_API_KEY || 'dummy-key',
+	baseURL: 'https://openrouter.ai/api/v1',
+	defaultHeaders: {
+		'HTTP-Referer': 'http://localhost:5173', // Optional, for OpenRouter rankings
+		'X-Title': 'Generative Adventure' // Optional
+	}
 });
-
-

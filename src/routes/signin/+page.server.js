@@ -1,5 +1,5 @@
-import { signIn } from "../../auth";
+import { signIn } from '../../auth';
 
 export const actions = {
-    default: signIn
-}
+	default: signIn
+};

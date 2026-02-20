@@ -2,10 +2,55 @@
 	export let prompt = '';
 	export let loading = false;
 	export let isThinking = false;
-	export let onSubmit;
+	export let onSubmit = () => {};
+	export let onQuickAction = (action) => {};
 </script>
 
-<form class="relative z-20 mt-auto pt-4 sm:pt-6" method="post" on:submit|preventDefault={onSubmit}>
+<form
+	class="relative z-20 mt-auto pt-4 sm:pt-6"
+	method="post"
+	on:submit|preventDefault={() => onSubmit()}
+>
+	<!-- Quick Actions -->
+	<div class="mb-3 flex flex-wrap gap-2">
+		<button
+			type="button"
+			on:click={() => onQuickAction('rest')}
+			disabled={loading}
+			class="rounded border border-white/20 bg-black/50 px-2 py-1 font-press-start text-[6px] text-white/60 transition-colors hover:bg-white/10 hover:text-white disabled:opacity-50 sm:text-[8px]"
+			title="Rest to recover health"
+		>
+			REST
+		</button>
+		<button
+			type="button"
+			on:click={() => onQuickAction('inventory')}
+			disabled={loading}
+			class="rounded border border-white/20 bg-black/50 px-2 py-1 font-press-start text-[6px] text-white/60 transition-colors hover:bg-white/10 hover:text-white disabled:opacity-50 sm:text-[8px]"
+			title="Check inventory"
+		>
+			INV
+		</button>
+		<button
+			type="button"
+			on:click={() => onQuickAction('look')}
+			disabled={loading}
+			class="rounded border border-white/20 bg-black/50 px-2 py-1 font-press-start text-[6px] text-white/60 transition-colors hover:bg-white/10 hover:text-white disabled:opacity-50 sm:text-[8px]"
+			title="Look around"
+		>
+			LOOK
+		</button>
+		<button
+			type="button"
+			on:click={() => onQuickAction('status')}
+			disabled={loading}
+			class="rounded border border-white/20 bg-black/50 px-2 py-1 font-press-start text-[6px] text-white/60 transition-colors hover:bg-white/10 hover:text-white disabled:opacity-50 sm:text-[8px]"
+			title="Check status"
+		>
+			STATUS
+		</button>
+	</div>
+
 	<div class="group relative">
 		<div
 			class="absolute -inset-0.5 bg-white/20 opacity-0 blur-sm transition-opacity group-focus-within:opacity-100"
@@ -24,5 +69,6 @@
 				autocomplete="off"
 			/>
 		</div>
+		<button type="submit" class="hidden" aria-hidden="true"></button>
 	</div>
 </form>
