@@ -16,7 +16,11 @@
 			<div class="dropdown dropdown-end">
 				<div tabindex="0" role="button" class="btn btn-ghost p-1 ring-1 ring-[#3f3]/30">
 					<div class="h-8 w-8 overflow-hidden rounded-sm border border-[#3f3]/50">
-						<img src={$page.data.session.user.image} class="contrast-125 grayscale" />
+						<img
+							src={$page.data.session.user.image}
+							alt="User profile"
+							class="contrast-125 grayscale"
+						/>
 					</div>
 				</div>
 				<!-- svelte-ignore a11y-no-noninteractive-tabindex -->

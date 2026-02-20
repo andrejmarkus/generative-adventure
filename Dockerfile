@@ -17,8 +17,8 @@ FROM node:${NODE_VERSION}-alpine as base
 WORKDIR /usr/src/app
 
 # Install pnpm.
-RUN --mount=type=cache,id=npm,target=/root/.npm \
-    npm install -g pnpm@${PNPM_VERSION}
+RUN npm install -g pnpm@${PNPM_VERSION} && \
+    pnpm config set node-linker hoisted
 
 ################################################################################
 # Create a stage for installing production dependencies.
@@ -28,10 +28,8 @@ FROM base as deps
 # Leverage a cache mount to /root/.local/share/pnpm/store to speed up subsequent builds.
 # Leverage bind mounts to package.json and pnpm-lock.yaml to avoid having to copy them
 # into this layer.
-RUN --mount=type=bind,source=package.json,target=package.json \
-    --mount=type=bind,source=pnpm-lock.yaml,target=pnpm-lock.yaml \
-    --mount=type=cache,id=pnpm,target=/root/.local/share/pnpm/store \
-    pnpm install --prod --frozen-lockfile
+COPY package.json pnpm-lock.yaml ./
+RUN pnpm install --prod --frozen-lockfile
 
 ################################################################################
 # Create a stage for building the application.
@@ -39,10 +37,7 @@ FROM deps as build
 
 # Download additional development dependencies before building, as some projects require
 # "devDependencies" to be installed to build. If you don't need this, remove this step.
-RUN --mount=type=bind,source=package.json,target=package.json \
-    --mount=type=bind,source=pnpm-lock.yaml,target=pnpm-lock.yaml \
-    --mount=type=cache,id=pnpm,target=/root/.local/share/pnpm/store \
-    pnpm install --frozen-lockfile
+RUN pnpm install --frozen-lockfile
 
 # Copy the rest of the source files into the image.
 COPY . .
@@ -55,7 +50,9 @@ RUN pnpm run build
 FROM base as final
 
 # Use production node environment by default.
-ENV NODE_ENV production
+ENV NODE_ENV=production
+ENV HOST=0.0.0.0
+ENV AUTH_TRUST_HOST=true
 
 # Run the application as a non-root user.
 USER node
@@ -69,8 +66,5 @@ COPY --from=deps --chown=node:node /usr/src/app/node_modules ./node_modules
 COPY --from=build --chown=node:node /usr/src/app/build ./build
 
 
-# Expose the port that the application listens on.
-EXPOSE 3000
-
 # Run the application.
-CMD ["node", "build/index.js"]
+CMD ["node", "build"]

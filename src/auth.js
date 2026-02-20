@@ -5,5 +5,6 @@ import Google from "@auth/sveltekit/providers/google";
 
 export const { handle, signIn, signOut } = SvelteKitAuth({ 
     providers: [Google],
-    adapter: MongoDBAdapter(client)
+    adapter: MongoDBAdapter(client),
+    trustHost: true
 });

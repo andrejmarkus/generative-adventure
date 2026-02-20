@@ -58,6 +58,7 @@ Create a `.env` file in the root directory and add the following:
 ```env
 # Auth.js
 AUTH_SECRET="your-auth-secret" # Generate one: openssl rand -base64 32
+AUTH_TRUST_HOST=true           # Required for Railway/non-Vercel deployments
 GOOGLE_CLIENT_ID="your-google-client-id"
 GOOGLE_CLIENT_SECRET="your-google-client-secret"
 

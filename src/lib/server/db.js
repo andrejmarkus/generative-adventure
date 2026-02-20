@@ -1,11 +1,22 @@
 import { MongoClient } from "mongodb";
 import { env } from '$env/dynamic/private'
 
-export const client = new MongoClient(env.MONGODB_URI);
-export const db = client.db(env.MONGODB_NAME);
+// Only initialize if MONGODB_URI is present to avoid errors during build/analysis
+// At build time, we use a placeholder to avoid throwing errors when the module is imported
+const uri = env.MONGODB_URI || "mongodb://localhost:27017/placeholder";
+export const client = new MongoClient(uri);
+
+// Use a placeholder if MONGODB_NAME is not available
+const dbName = env.MONGODB_NAME || "gen_adventure_db";
+export const db = client.db(dbName);
 export const adventuresCollection = db.collection('adventures');
 
 export async function connect() {
+    // Only attempt to connect if we have a real URI
+    if (!env.MONGODB_URI) {
+        console.warn('MONGODB_URI not defined, skipping connection (likely during build/analysis)');
+        return;
+    }
     await client.connect();
 }
 
