@@ -15,7 +15,7 @@
 			: 'border-white/20 bg-black'}"
 	>
 		<div
-			class="font-press-start mb-4 flex items-center gap-3 text-[8px] uppercase tracking-[0.2em] {user
+			class="mb-4 flex items-center gap-3 font-press-start text-[8px] uppercase tracking-[0.2em] {user
 				? 'text-[#f8d81c]'
 				: 'text-white'}"
 		>
@@ -27,7 +27,7 @@
 			{/if}
 		</div>
 		<p
-			class="whitespace-pre-wrap text-wrap font-pixel-operator text-2xl leading-relaxed tracking-wide {user
+			class="whitespace-pre-wrap text-wrap font-pixel-operator text-xl leading-relaxed tracking-wide md:text-2xl {user
 				? 'text-[#f8d81c]/90'
 				: 'text-white/90'}"
 		>

@@ -22,26 +22,32 @@
 </script>
 
 {#if show}
-	<div class="retro-container group bg-[#040404] p-6 transition-all hover:bg-[#080808]">
-		<div class="flex flex-col items-start justify-between gap-6 md:flex-row md:items-center">
-			<div>
+	<div class="retro-container group bg-[#040404] p-4 transition-all hover:bg-[#080808] md:p-6">
+		<div
+			class="flex flex-col items-start justify-between gap-4 md:flex-row md:items-center md:gap-6"
+		>
+			<div class="w-full md:w-auto">
 				<p
-					class="font-press-start text-sm uppercase tracking-[0.2em] text-white transition-colors group-hover:text-[#f8d81c]"
+					class="font-press-start text-xs uppercase tracking-widest text-white transition-colors group-hover:text-[#f8d81c] md:text-sm md:tracking-[0.2em]"
 				>
 					{name}
 				</p>
-				<p class="mt-3 font-pixel-operator text-xs uppercase tracking-widest text-white/50">
+				<p
+					class="mt-2 font-pixel-operator text-[10px] uppercase tracking-widest text-white/50 md:mt-3 md:text-xs"
+				>
 					HERO: {characterName}
 				</p>
 			</div>
-			<div class="flex w-full gap-4 md:w-auto">
+			<div class="flex w-full gap-3 md:w-auto md:gap-4">
 				<button
 					on:click={() => confirm_modal.showModal()}
-					class="retro-button is-error flex-1 text-[8px] uppercase md:flex-none">ERASE</button
+					class="retro-button is-error flex-1 text-[8px] uppercase sm:text-[10px] md:flex-none"
+					>ERASE</button
 				>
 				<a
 					href="/app/{adventureId}"
-					class="retro-button is-primary flex-1 text-[8px] uppercase md:flex-none">CONTINUE</a
+					class="retro-button is-primary flex-1 text-[8px] uppercase sm:text-[10px] md:flex-none"
+					>CONTINUE</a
 				>
 			</div>
 		</div>

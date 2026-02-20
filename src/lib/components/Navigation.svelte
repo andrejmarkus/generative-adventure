@@ -3,15 +3,17 @@
 	import { page } from '$app/stores';
 </script>
 
-<nav class="navbar sticky top-0 z-[1000] border-b-2 border-white/10 bg-black/80 backdrop-blur-sm">
-	<div class="flex-1 px-4">
+<nav
+	class="navbar sticky top-0 z-[1000] border-b-2 border-white/10 bg-black/80 px-2 backdrop-blur-sm sm:px-4"
+>
+	<div class="flex-1">
 		<a
 			href="/"
-			class="font-press-start text-xs font-bold tracking-[0.2em] text-white transition-colors hover:text-[#f8d81c]"
-			>GENERATIVE ADVENTURE</a
+			class="font-press-start text-[8px] font-bold tracking-tight text-white transition-colors hover:text-[#f8d81c] sm:text-xs sm:tracking-[0.2em]"
+			><span class="hidden sm:inline">GENERATIVE </span>ADVENTURE</a
 		>
 	</div>
-	<div class="flex-none px-4">
+	<div class="flex-none">
 		{#if $page.data.session}
 			<div class="dropdown dropdown-end">
 				<div tabindex="0" role="button" class="retro-button h-auto min-h-0 p-1">
@@ -31,7 +33,7 @@
 					<li>
 						<button
 							on:click={() => signOut()}
-							class="font-press-start rounded-none py-3 text-[8px] hover:bg-white/10"
+							class="rounded-none py-3 font-press-start text-[8px] hover:bg-white/10"
 							>EXIT GAME</button
 						>
 					</li>

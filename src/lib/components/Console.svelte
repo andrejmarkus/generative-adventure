@@ -1,5 +1,7 @@
 <script>
 	import Message from './Message.svelte';
+	import StatusBar from './StatusBar.svelte';
+	import CommandLine from './CommandLine.svelte';
 	import { page } from '$app/stores';
 	import { onMount, tick } from 'svelte';
 
@@ -18,6 +20,99 @@
 	let result = '';
 	let container;
 	let autoscroll = true;
+	let isExpanded = false;
+	let toasts = [];
+	let toastId = 0;
+
+	$: if (stats) {
+		// Detect stat changes and show toasts
+		const prevStats = stats;
+		// We'll compare in the reactive statement below
+	}
+
+	// Reactive statement to detect changes
+	$: {
+		if (stats && typeof window !== 'undefined') {
+			const prevStats = JSON.parse(sessionStorage.getItem('prevStats') || '{}');
+			const changes = [];
+
+			if (prevStats.health !== undefined && prevStats.health !== stats.health) {
+				const diff = stats.health - prevStats.health;
+				changes.push({
+					type: 'health',
+					message: `Health ${diff > 0 ? '+' : ''}${diff}`,
+					color: diff > 0 ? 'text-green-400' : 'text-red-400'
+				});
+			}
+			if (prevStats.hunger !== undefined && prevStats.hunger !== stats.hunger) {
+				const diff = stats.hunger - prevStats.hunger;
+				changes.push({
+					type: 'hunger',
+					message: `Hunger ${diff > 0 ? '+' : ''}${diff}`,
+					color: diff > 0 ? 'text-blue-400' : 'text-orange-400'
+				});
+			}
+			if (prevStats.money !== undefined && prevStats.money !== stats.money) {
+				const diff = stats.money - prevStats.money;
+				changes.push({
+					type: 'money',
+					message: `Gold ${diff > 0 ? '+' : ''}${diff}`,
+					color: 'text-yellow-400'
+				});
+			}
+
+			// Check inventory changes
+			const prevInventory = prevStats.inventory || [];
+			const currentInventory = stats.inventory || [];
+			const addedItems = currentInventory.filter((item) => !prevInventory.includes(item));
+			const removedItems = prevInventory.filter((item) => !currentInventory.includes(item));
+
+			addedItems.forEach((item) => {
+				changes.push({
+					type: 'inventory',
+					message: `+ ${item}`,
+					color: 'text-green-400'
+				});
+			});
+			removedItems.forEach((item) => {
+				changes.push({
+					type: 'inventory',
+					message: `- ${item}`,
+					color: 'text-red-400'
+				});
+			});
+
+			// Check weapons changes
+			const prevWeapons = prevStats.weapons || [];
+			const currentWeapons = stats.weapons || [];
+			const addedWeapons = currentWeapons.filter((item) => !prevWeapons.includes(item));
+			const removedWeapons = prevWeapons.filter((item) => !currentWeapons.includes(item));
+
+			addedWeapons.forEach((item) => {
+				changes.push({
+					type: 'weapon',
+					message: `+ ${item}`,
+					color: 'text-purple-400'
+				});
+			});
+			removedWeapons.forEach((item) => {
+				changes.push({
+					type: 'weapon',
+					message: `- ${item}`,
+					color: 'text-red-400'
+				});
+			});
+
+			changes.forEach((change) => {
+				toasts = [...toasts, { ...change, id: ++toastId }];
+				setTimeout(() => {
+					toasts = toasts.filter((t) => t.id !== toastId);
+				}, 3000);
+			});
+
+			sessionStorage.setItem('prevStats', JSON.stringify(stats));
+		}
+	}
 
 	const extractStats = (text) => {
 		const newStats = { ...stats };
@@ -179,16 +274,32 @@
 </script>
 
 <div
-	class="relative flex h-full flex-col items-stretch gap-4 p-4 font-pixel-operator lg:flex-row lg:gap-8 lg:p-8"
+	class="relative flex h-full flex-col items-stretch gap-2 p-2 font-pixel-operator sm:gap-4 sm:p-4 lg:p-8"
 >
-	<div class="flex min-w-0 flex-1 flex-col items-stretch">
+	<!-- Top Adaptive HUD -->
+	<StatusBar {stats} bind:isExpanded />
+
+	<!-- Toast Notifications -->
+	<div class="fixed right-4 top-20 z-50 space-y-2">
+		{#each toasts as toast (toast.id)}
+			<div
+				class="animate-slide-in-right border bg-gray-800 border-{toast.color.split(
+					'-'
+				)[1]}-400 font-mono rounded px-4 py-2 text-sm text-white shadow-lg {toast.color}"
+			>
+				{toast.message}
+			</div>
+		{/each}
+	</div>
+
+	<div class="flex min-w-0 flex-1 flex-col items-stretch overflow-hidden">
 		<div
 			bind:this={container}
 			on:scroll={handleScroll}
-			class="custom-scrollbar relative z-0 flex h-full flex-col overflow-y-auto px-4"
+			class="custom-scrollbar relative z-0 flex h-full flex-col overflow-y-auto px-2 sm:px-4"
 		>
 			{#if messages}
-				<div class="flex flex-col gap-2 pt-8">
+				<div class="flex flex-col gap-2 pt-4 sm:pt-8">
 					{#each messages.slice(2) as message, i}
 						<Message
 							message={message.role === 'assistant' ? stripStats(message.content) : message.content}
@@ -201,95 +312,22 @@
 				<Message message={result} user={false} isLoading={true} />
 			{/if}
 		</div>
-		<form class="relative z-20 mt-auto pt-8" method="post" on:submit|preventDefault={handleSubmit}>
-			<div class="group relative">
-				<div
-					class="absolute -inset-0.5 bg-white/20 opacity-0 blur-sm transition-opacity group-focus-within:opacity-100"
-				></div>
-				<div
-					class="relative flex items-center gap-5 border-2 border-white/40 bg-black p-5 shadow-[0_0_20px_rgba(0,0,0,0.5)] transition-all focus-within:border-white"
-				>
-					<span class="font-press-start text-xs font-bold text-[#f8d81c]">CMD_</span>
-					<input
-						bind:value={prompt}
-						disabled={loading}
-						name="prompt"
-						placeholder={isThinking
-							? 'TRANSMITTING...'
-							: loading
-								? 'PROCESSING...'
-								: 'ENTER COMMAND'}
-						class="w-full bg-transparent font-press-start text-[10px] tracking-widest text-white outline-none placeholder:text-white/20"
-						type="text"
-						autocomplete="off"
-					/>
-				</div>
-			</div>
-		</form>
-	</div>
-
-	<!-- Stats HUD -->
-	<div
-		class="flex w-full flex-col gap-6 border-2 border-white/20 bg-black/40 p-6 text-[12px] uppercase tracking-tighter shadow-2xl backdrop-blur-sm lg:w-72"
-	>
-		<div class="border-b border-white/20 pb-2">
-			<h3 class="font-press-start text-[10px] text-[#f8d81c]">STATUS</h3>
-		</div>
-
-		<div class="space-y-4">
-			<div>
-				<div class="mb-1 flex justify-between">
-					<span class="text-white/60">Health</span>
-					<span class="text-red-500">{stats?.health || 100}/100</span>
-				</div>
-				<div class="h-1.5 w-full border border-white/10 bg-white/5">
-					<div
-						class="h-full bg-red-600 shadow-[0_0_10px_rgba(220,38,38,0.5)] transition-all duration-500"
-						style="width: {stats?.health || 100}%"
-					></div>
-				</div>
-			</div>
-
-			<div>
-				<div class="mb-1 flex justify-between">
-					<span class="text-white/60">Hunger</span>
-					<span class="text-orange-500">{stats?.hunger || 100}/100</span>
-				</div>
-				<div class="h-1.5 w-full border border-white/10 bg-white/5">
-					<div
-						class="h-full bg-orange-600 shadow-[0_0_10px_rgba(234,88,12,0.5)] transition-all duration-500"
-						style="width: {stats?.hunger || 100}%"
-					></div>
-				</div>
-			</div>
-
-			<div class="flex justify-between">
-				<span class="text-white/60">Currency</span>
-				<span class="font-bold text-[#f8d81c]">{stats?.money || 0} GOLD</span>
-			</div>
-		</div>
-
-		<div class="flex min-h-[150px] flex-1 flex-col">
-			<div class="mb-3 border-b border-white/10 pb-1">
-				<h3 class="font-press-start text-[8px] text-white/40">Inventory / Equipment</h3>
-			</div>
-			<div class="custom-scrollbar flex-1 overflow-y-auto pr-2">
-				<ul class="list-none space-y-2 p-0 text-[11px] text-white/80">
-					{#each [...(stats?.weapons || []), ...(stats?.inventory || [])] as item}
-						<li class="flex gap-2">
-							<span class="text-[#f8d81c]">></span>
-							<span class="leading-tight">{item}</span>
-						</li>
-					{/each}
-					{#if !stats?.inventory?.length && !stats?.weapons?.length}
-						<li class="italic text-white/20">Empty</li>
-					{/if}
-				</ul>
-			</div>
-		</div>
-
-		<div class="border-t border-white/10 pt-4 font-press-start text-[9px] text-white/40 opacity-50">
-			SYSTEM SIGNAL: STABLE
-		</div>
+		<CommandLine {prompt} {loading} {isThinking} onSubmit={handleSubmit} />
 	</div>
 </div>
+
+<style>
+	@keyframes slide-in-right {
+		from {
+			transform: translateX(100%);
+			opacity: 0;
+		}
+		to {
+			transform: translateX(0);
+			opacity: 1;
+		}
+	}
+	.animate-slide-in-right {
+		animation: slide-in-right 0.5s ease-out;
+	}
+</style>

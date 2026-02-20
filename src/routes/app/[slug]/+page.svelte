@@ -8,6 +8,6 @@
 	<title>Generative adventure</title>
 </svelte:head>
 
-<div class="h-[93vh]">
+<div class="h-[calc(100dvh-64px)] lg:h-[93vh]">
 	<Console messages={data.messages} stats={data.adventure.stats} />
 </div>
